@@ -31,7 +31,7 @@ def test_EVDI(opt):
     net = net.eval()
     
     ## load dataset
-    testDataset = test_dataset(opt.test_path, 16, opt.test_ts, roiTL=opt.roiTL, roi_size=opt.roi_size)
+    testDataset = test_dataset(opt.test_path, 16, opt.test_ts)
     
     ## testing
     with torch.no_grad():
@@ -85,11 +85,9 @@ def test_EVDI(opt):
 if __name__ == '__main__':
     ## parameters
     parser = argparse.ArgumentParser(description="Test EVDI")
-    parser.add_argument("--model_path", type=str, default="./PreTrained/EVDI-GoPro.pth", help="model saving path")
-    parser.add_argument("--test_path", type=str, default="./Database/GoPro/", help="test data path")
-    parser.add_argument("--save_path", type=str, default="./Result/EVDI-GoPro/", help="saving path")
-    parser.add_argument("--roiTL", type=tuple, default=(0,0), help="coordinate of the top-left pixel in region of interest")
-    parser.add_argument("--roi_size", type=tuple, default=(160,320), help="size of region of interest")
+    parser.add_argument("--model_path", type=str, default="./PreTrained/EVDI-RBE.pth", help="model saving path")
+    parser.add_argument("--test_path", type=str, default="./Database/RBE/", help="test data path")
+    parser.add_argument("--save_path", type=str, default="./Result/EVDI-RBE/", help="saving path")
     parser.add_argument("--test_ts", type=float, default=0.5, help="test timestamp in [0,1]")
     
     opt = parser.parse_args()

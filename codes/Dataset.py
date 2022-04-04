@@ -170,7 +170,7 @@ class train_dataset(Dataset):
 
 #%% Test datasets
 class test_dataset(Dataset):
-    def __init__(self, data_path, num_bins, target_ts, roiTL, roi_size):
+    def __init__(self, data_path, num_bins, target_ts):
         '''
         Parameters
         ----------
@@ -180,10 +180,6 @@ class test_dataset(Dataset):
             the number of bins in event frame.
         target_ts : float
             target reconstruction timestamps, normalized to [0,1].
-        roiTL : tuple
-            coordinate of the top-left pixel in region of interest. 
-        roi_size : tuple
-            size of region of interest. 
 
         '''
         self.data_path = data_path
@@ -191,8 +187,6 @@ class test_dataset(Dataset):
         self.data_len = len(self.data_list)
         self.num_bins = num_bins
         self.target_ts = target_ts
-        self.roiTL = roiTL
-        self.roi_size = roi_size
     
     def __len__(self):
         return self.data_len
@@ -234,11 +228,8 @@ class test_dataset(Dataset):
         exp_end_rightB = data['exp_end2']
         span_rightB = (exp_start_rightB, exp_end_rightB)
         
+        img_size = leftB.shape
         total_span = (exp_start_leftB, exp_end_rightB)
-        
-        ## crop roi
-        leftB = leftB[self.roiTL[0]:self.roiTL[0]+self.roi_size[0], self.roiTL[1]:self.roiTL[1]+self.roi_size[1]]
-        rightB = rightB[self.roiTL[0]:self.roiTL[0]+self.roi_size[0], self.roiTL[1]:self.roiTL[1]+self.roi_size[1]]
         
         ## generate target timestamps
         time_span = exp_end_rightB - exp_start_leftB
@@ -257,12 +248,12 @@ class test_dataset(Dataset):
         rightB_coef = []
 
         ## for leftB
-        leftB_inp1_tmp, leftB_inp2_tmp, leftB_w1_tmp, leftB_w2_tmp = util.event2frame(events, self.roi_size, ts, span_leftB, total_span, self.num_bins, 0, self.roiTL)
+        leftB_inp1_tmp, leftB_inp2_tmp, leftB_w1_tmp, leftB_w2_tmp = util.event2frame(events, img_size, ts, span_leftB, total_span, self.num_bins, 0, (0,0))
         leftB_inp1_tmp = util.fold_time_dim(leftB_inp1_tmp)
         leftB_inp2_tmp = util.fold_time_dim(leftB_inp2_tmp)
         
         ## for rightB
-        rightB_inp1_tmp, rightB_inp2_tmp, rightB_w1_tmp, rightB_w2_tmp = util.event2frame(events, self.roi_size, ts, span_rightB, total_span, self.num_bins, 0, self.roiTL)
+        rightB_inp1_tmp, rightB_inp2_tmp, rightB_w1_tmp, rightB_w2_tmp = util.event2frame(events, img_size, ts, span_rightB, total_span, self.num_bins, 0, (0,0))
         rightB_inp1_tmp = util.fold_time_dim(rightB_inp1_tmp)
         rightB_inp2_tmp = util.fold_time_dim(rightB_inp2_tmp)
         
@@ -298,3 +289,4 @@ class test_dataset(Dataset):
         return leftB_inp1,leftB_inp2,leftB,leftB_w1,leftB_w2, \
             rightB_inp1,rightB_inp2,rightB,rightB_w1,rightB_w2, \
                  leftB_coef, rightB_coef, save_prefix
+                 
