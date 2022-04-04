@@ -27,24 +27,20 @@ pip install -r requirements.txt
 Pretrained models and some example data can be downloaded via [**Google Drive**](https://drive.google.com/drive/folders/1NkdkRWdKMQG-UKSOurhaounVSYwJ-HJ9?usp=sharing).
 <br>
 In our paper, we conduct experiments on three types of data:
-- **GoPro** contains synthetic blurry images and synthetic events. We first convert [REDS dataset](https://seungjunnah.github.io/Datasets/reds.html) into high frame rate videos using [RIFE](https://github.com/hzwer/arXiv2021-RIFE), and then obtain blurry images by averaging sharp frames and generate events by [ESIM](https://github.com/uzh-rpg/rpg_vid2e).
+- **GoPro** contains synthetic blurry images and synthetic events. We first convert [REDS](https://seungjunnah.github.io/Datasets/reds.html) into high frame rate videos using [RIFE](https://github.com/hzwer/arXiv2021-RIFE), and then obtain blurry images by averaging sharp frames and generate events by [ESIM](https://github.com/uzh-rpg/rpg_vid2e).
 - **HQF** contains synthetic blurry images and real-world events from [HQF](https://timostoff.github.io/20ecnn), where blurry images are generated using the same manner as GoPro.
 - **RBE** contains real-world blurry images and real-world events from [RBE](https://github.com/xufangchn/Motion-Deblurring-with-Real-Events).
 
 
 ## Quick start
-(TBD)
 ### Initialization
 Change the parent directory to './codes/'
 ```
 cd codes
 ```
-- Create directories
-```
-mkdir -p PreTraining Results Example_data/{Raw,Processed}
-```
-- Copy the pretrained model to directory './PreTraining/'
-- Copy the event data and the corresponding occlusion-free APS images to directories './Example_data/Raw/Event/' and  './Example_data/Raw/APS/'
+Copy the pretrained model to directory './PreTrained/'
+Copy the example data to directory './Database/'
+
 
 ### E-SAI+Hybrid (M)
 Run E-SAI+Hybrid with manual refocusing module.
