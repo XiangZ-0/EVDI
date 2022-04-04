@@ -85,8 +85,8 @@ def test_EVDI(opt):
 if __name__ == '__main__':
     ## parameters
     parser = argparse.ArgumentParser(description="Test EVDI")
-    parser.add_argument("--model_path", type=str, default="./PreTrained/EVDI-RBE.pth", help="model saving path")
-    parser.add_argument("--test_path", type=str, default="./Database/RBE/", help="test data path")
+    parser.add_argument("--model_path", type=str, default="./PreTrained/EVDI-RBE.pth", help="path of pretrained model")
+    parser.add_argument("--test_path", type=str, default="./Database/RBE/", help="path of test data")
     parser.add_argument("--save_path", type=str, default="./Result/EVDI-RBE/", help="saving path")
     parser.add_argument("--test_ts", type=float, default=0.5, help="test timestamp in [0,1]")
     
