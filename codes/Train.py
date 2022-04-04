@@ -150,10 +150,10 @@ if __name__ == '__main__':
     parser.add_argument("--save_int", type=int, default=50, help="epoch interval for saving temporal reconstruction result")
     parser.add_argument("--train_path", type=list, default=["./Database/train/"], help="path of training datasets")
     parser.add_argument("--conTrain", type=int, default=0, help="continue training (1) or not (0)")
-    parser.add_argument("--conTrain_path", type=str, default="./PreTrained/EVDI-RBE.pth", help="path to load model")
+    parser.add_argument("--conTrain_path", type=str, default="./PreTrained/EVDI-GoPro.pth", help="path to load model")
     parser.add_argument("--num_epoch", type=int, default=100, help="number of epoch")
     parser.add_argument("--loss_wei", type=list, default=[1,256,1e-1], help="weights for loss functions: [blur-sharp, blur-event, sharp-event]")
-    parser.add_argument("--num_frames", type=int, default=25, help="recover how many frames per input, i.e., 'N' in paper.\
+    parser.add_argument("--num_frames", type=int, default=49, help="recover how many frames per input, i.e., 'N' in paper.\
                         We observe that higher N leads to better performance but will need more training time (recommended N>=13). ")
     parser.add_argument("--bs", type=int, default=4, help="batch size")
     parser.add_argument("--lr", type=float, default=1e-3, help="learning rate")
