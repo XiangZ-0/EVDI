@@ -34,49 +34,33 @@ In our paper, we conduct experiments on three types of data:
 
 ## Quick start
 ### Initialization
-Change the parent directory to './codes/'
+- Change the parent directory to './codes/'
 ```
 cd codes
 ```
-Copy the pretrained model to directory './PreTrained/'
-Copy the example data to directory './Database/'
+- Copy the pretrained model to directory './PreTrained/'
+- Copy the example data to directory './Database/'
 
+### Test
+- Test GoPro data
+```
+python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-GoPro.pth --test_path=./Database/GoPro/ --save_path=./Result/EVDI-GoPro/ 
+```
+- Test HQF data
+```
+python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-HQF.pth --test_path=./Database/HQF/ --save_path=./Result/EVDI-HQF/ 
+```
+- Test RBE data
+```
+python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-RBE.pth --test_path=./Database/RBE/ --save_path=./Result/EVDI-RBE/
+```
+Change test_ts (in \[0,1\]) to generate results at arbitrary time instances.
 
-### E-SAI+Hybrid (M)
-Run E-SAI+Hybrid with manual refocusing module.
-- Preprocess event data with manual refocusing
+### Train
+If you want to train your own model, please modify the parameters in 'Train.py' according to your need and run
 ```
-python Preprocess.py --do_event_refocus=1 --input_event_path=./Example_data/Raw/Event/ --input_aps_path=./Example_data/Raw/APS/
+python Train.py
 ```
-- Run reconstruction (using only HybridNet)
-```
-python Test_ManualRefocus.py --reconNet=./PreTraining/Hybrid.pth --input_path=./Example_data/Processed/Event/ --save_path="./Results/Test/"
-```
-The reconstruction results will be saved at save_path (default: './Results/Test/').
-
-### E-SAI+Hybrid (A)
-Run E-SAI+Hybrid with auto refocusing module.
-- Preprocess event data without refocusing
-```
-python Preprocess.py --do_event_refocus=0 --input_event_path=./Example_data/Raw/Event/ --input_aps_path=./Example_data/Raw/APS/
-```
-- Run reconstruction (using HybridNet and RefocusNet)
-```
-python Test_AutoRefocus.py --reconNet=./PreTraining/Hybrid.pth --refocusNet=./PreTraining/RefocusNet.pth --input_path=./Example_data/Processed/Event/ --save_path="./Results/Test/"
-```
-The reconstruction results will be saved at save_path (default: './Results/Test/'). 
-<br>
-This code will also calculate the Max Pixel Shift Error (MPSE) and save the result in './Results/Test/MPSE.txt'.
-
-### Evaluation
-Evaluate the reconstruction results with metrics PSNR, SSIM and LPIPS.
-- Copy the occlusion-free APS images in './Example_data/Raw/APS/' to directory './Results/True/'
-- Run evaluation
-```
-python Evaluation.py
-```
-This code will create an IQA.txt file containing the quantitative results in './Results/IQA.txt'.
-
 
 ## Citation
 
