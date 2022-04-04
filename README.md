@@ -42,19 +42,19 @@ cd codes
 - Copy the example data to directory './Database/'
 
 ### Test
-Test GoPro data
+- Test GoPro data
 ```
 python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-GoPro.pth --test_path=./Database/GoPro/ --save_path=./Result/EVDI-GoPro/ 
 ```
-Test HQF data
+- Test HQF data
 ```
 python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-HQF.pth --test_path=./Database/HQF/ --save_path=./Result/EVDI-HQF/ 
 ```
-Test RBE data
+- Test RBE data
 ```
 python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-RBE.pth --test_path=./Database/RBE/ --save_path=./Result/EVDI-RBE/
 ```
-Parameters:
+**Parameters:**
 - `--test_ts` : reconstruction timestamp, normalized in \[0,1\].
 - `--model_path` : path of pretrained model.
 - `--test_path` : path of test dataset.
