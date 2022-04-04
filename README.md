@@ -24,18 +24,12 @@ pip install -r requirements.txt
 ```
 
 ## Download model and data
-### Pretrained Model
-(TBD)
-Pretrained model can be downloaded via Baidu Net Disk. 
+Pretrained models and some example data can be downloaded via [**Google Drive**](https://drive.google.com/drive/folders/1NkdkRWdKMQG-UKSOurhaounVSYwJ-HJ9?usp=sharing).
 <br>
-HybridNet and RefocusNet: [**Baidu Net Disk**](https://pan.baidu.com/s/1iqBrwwgf2bE_ztimJhWjmA) (Password: u8a4)
-<br>
-Note that the network structure is slightly different from the model in our CVPR paper.
-
-### Example Data
-Some example data is available. 
-<br>
-Example Data: [**Baidu Net Disk**](https://pan.baidu.com/s/1AC0KjsMdWNznXzwhE4MVdg) (Password: dklm) or [**Google Drive**](https://drive.google.com/drive/folders/1kHBANtcQDi7GyBWyykvgFKjTGH36V1-O?usp=sharing).
+In our paper, we conduct experiments on three types of data:
+- **GoPro** contains synthetic blurry images and synthetic events. We first convert [REDS dataset](https://seungjunnah.github.io/Datasets/reds.html) into high frame rate videos using [RIFE](https://github.com/hzwer/arXiv2021-RIFE), and then obtain blurry images by averaging sharp frames and generate events by [ESIM](https://github.com/uzh-rpg/rpg_vid2e).
+- **HQF** contains synthetic blurry images and real-world events from [HQF](https://timostoff.github.io/20ecnn), where blurry images are generated using the same manner as GoPro.
+- **RBE** contains real-world blurry images and real-world events from [RBE](https://github.com/xufangchn/Motion-Deblurring-with-Real-Events).
 
 
 ## Quick start
