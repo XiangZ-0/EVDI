@@ -42,19 +42,19 @@ cd codes
 - Copy the example data to directory './Database/'
 
 ### Test
-- Test GoPro data
+- Test on GoPro data
 ```
 python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-GoPro.pth --test_path=./Database/GoPro/ --save_path=./Result/EVDI-GoPro/ 
 ```
-- Test HQF data
+- Test on HQF data
 ```
 python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-HQF.pth --test_path=./Database/HQF/ --save_path=./Result/EVDI-HQF/ 
 ```
-- Test RBE data
+- Test on RBE data
 ```
 python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-RBE.pth --test_path=./Database/RBE/ --save_path=./Result/EVDI-RBE/
 ```
-**Parameters:**
+**Main Parameters:**
 - `--test_ts` : reconstruction timestamp, normalized in \[0,1\].
 - `--model_path` : path of pretrained model.
 - `--test_path` : path of test dataset.
@@ -65,9 +65,16 @@ If you want to train your own model, please modify the parameters in 'Train.py' 
 ```
 python Train.py
 ```
+**Main Parameters:**
+- `--model_path` : model save path.
+- `--train_path` : path of train datasets.
+- `--num_epoch` : number of epoch.
+- `--loss_wei` : weights for loss functions \[blur-sharp, blur-event, sharp-event\].
+- `--num_frames` : the number of reconstructions per input, i.e., 'N' in paper (recommended N>= 13).
+- `--bs` : batch size.
+- `--lr` : initial learning rate.
 
 ## Citation
-
 If you find our work useful in your research, please cite:
 
 ```
