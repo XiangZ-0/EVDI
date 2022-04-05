@@ -154,7 +154,7 @@ if __name__ == '__main__':
     parser.add_argument("--num_epoch", type=int, default=100, help="number of epoch")
     parser.add_argument("--loss_wei", type=list, default=[1,256,1e-1], help="weights for loss functions: [blur-sharp, blur-event, sharp-event]")
     parser.add_argument("--num_frames", type=int, default=49, help="recover how many frames per input, i.e., 'N' in paper.\
-                        We observe that higher N leads to better performance but will need more training time (recommended N>=13). ")
+                        We observe that higher N leads to better performance but will need more training time (recommended N>=25). ")
     parser.add_argument("--bs", type=int, default=4, help="batch size")
     parser.add_argument("--lr", type=float, default=1e-3, help="learning rate")
     
