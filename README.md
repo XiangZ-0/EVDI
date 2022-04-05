@@ -70,7 +70,7 @@ python Train.py
 - `--train_path` : path of train datasets.
 - `--num_epoch` : number of epoch.
 - `--loss_wei` : weights for loss functions \[blur-sharp, blur-event, sharp-event\].
-- `--num_frames` : the number of reconstructions per input, i.e., 'N' in paper (recommended N>= 13).
+- `--num_frames` : the number of reconstructions per input, i.e., 'N' in paper (recommended N>= 25).
 - `--bs` : batch size.
 - `--lr` : initial learning rate.
 
