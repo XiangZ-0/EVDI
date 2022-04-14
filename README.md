@@ -3,10 +3,10 @@
 [**Unifying Motion Deblurring and Frame Interpolation with Events**](https://arxiv.org/abs/2203.12178)
 
 Slow shutter speed and long exposure time of frame-based cameras often cause visual blur and loss of inter-frame information, degenerating the overall quality of captured videos. To this end, we present a unified framework of event-based motion deblurring and frame interpolation for blurry video enhancement, where the extremely low latency of events is leveraged to alleviate motion blur and facilitate intermediate frame prediction. Specifically, the mapping relation between blurry frames and sharp latent images is first predicted by a learnable double integral network, and a fusion network is then proposed to refine the coarse results via utilizing the information from consecutive blurry inputs and the concurrent events. By exploring the mutual constraints among blurry frames, latent images, and event streams, we further propose a self-supervised learning framework to enable network training with real-world blurry videos and events.
-<br>
-<br>
-10X (middle) and 100X (right) frame-rate results from two blurry images:
+
 ![Demo](./figs/upsample-RBE.gif)
+
+10X (middle) and 100X (right) frame-rate results from one EVDI model.
 
 ## Environment setup
 - Python 3.7
