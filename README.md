@@ -23,7 +23,7 @@ pip install -r requirements.txt
 ```
 
 ## Download model and data
-Pretrained models and some example data can be downloaded via [**Google Drive**](https://drive.google.com/drive/folders/1NkdkRWdKMQG-UKSOurhaounVSYwJ-HJ9?usp=sharing).
+[Pretrained models](https://drive.google.com/drive/folders/1MIBQukoyK3_7lx3WZ4nB-PJqoRltb70B?usp=sharing) and some [example data](https://drive.google.com/drive/folders/1ihwE4KLwUMkc3Jwf6Gqq_XWRkzTpp811?usp=sharing) can be downloaded via Google Drive.
 <br>
 In our paper, we conduct experiments on three types of data:
 - **GoPro** contains synthetic blurry images and synthetic events. We first convert [REDS](https://seungjunnah.github.io/Datasets/reds.html) into high frame rate videos using [RIFE](https://github.com/hzwer/arXiv2021-RIFE), and then obtain blurry images by averaging sharp frames and generate events by [ESIM](https://github.com/uzh-rpg/rpg_vid2e).
