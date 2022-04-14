@@ -19,6 +19,8 @@ You can create a new [Anaconda](https://www.anaconda.com/products/individual) en
 ```
 conda create -n evdi python=3.7
 conda activate evdi
+git clone git@github.com:XiangZ-0/EVDI.git
+cd EVDI
 pip install -r requirements.txt
 ```
 
