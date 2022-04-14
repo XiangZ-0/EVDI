@@ -14,12 +14,18 @@ Slow shutter speed and long exposure time of frame-based cameras often cause vis
 - NVIDIA GPU + CUDA
 - numpy, argparse
 
-You can create a new [Anaconda](https://www.anaconda.com/products/individual) environment with the above dependencies as follows.
+You can create a new [Anaconda](https://www.anaconda.com/products/individual) environment as follows.
 <br>
 ```
 conda create -n evdi python=3.7
 conda activate evdi
+```
+Clone this repository.
+```
 git clone git@github.com:XiangZ-0/EVDI.git
+```
+Install the above dependencies.
+```
 cd EVDI
 pip install -r requirements.txt
 ```
