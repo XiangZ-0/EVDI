@@ -142,3 +142,55 @@ def event_single_intergral(event, img_size, span, roiTL=(0,0)):
     event_img = event_img.reshape((H,W))
     
     return event_img
+
+def read_txt(txt_path, interval=1, start=0):
+    ## read data from txt files
+    file = open(txt_path)
+    ind = 0
+    res = []
+    while 1:
+        line = file.readline()
+        if not line:
+            break
+        if (ind >= start):
+            if (ind % interval == 0):
+                res.append(line.split())
+        ind += 1
+    return res
+
+def load_timestamps_from_txt(txt_path, time_scale=1):
+    # read timestamps from txt files
+    timestamps = read_txt(txt_path)
+    ret = []
+    for j, ts in enumerate(timestamps):
+        ret.append(float(ts[0]) * time_scale)
+        
+    ret = np.array(ret).astype(int) # timestamps in ns
+    return ret
+
+def load_event_from_txt(txt_path, time_scale=1, img_size=(260,346), neg_value=-1):
+    ## read events from txt files
+    event_info = read_txt(txt_path)
+    x = []
+    y = []
+    t = []
+    p = []
+    events = dict()
+    for j, e in enumerate(event_info):
+        t.append(float(e[0]) * time_scale)
+        x.append(int(e[1]))
+        y.append(int(e[2]))
+        p.append(int(e[3]))
+        
+    events['t'] = np.array(t).astype(int) # timestamps in ns
+    events['x'] = np.array(x).astype(int)
+    events['y'] = np.array(y).astype(int)
+    events['p'] = np.array(p).astype(int)
+    
+    if neg_value == -1:
+        events['p'][events['p']==0] = -1
+    
+    assert (events['x'].max() < img_size[1])
+    assert (events['y'].max() < img_size[0])
+    
+    return events
