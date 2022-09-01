@@ -81,7 +81,10 @@ If you want to train your own model, please prepare the blurry images and events
   |     |     |     |-- 000001.png
   |     |     |     |-- ...
 ```
-Events.txt contains event data in (t,x,y,p) format. Exposure_start.txt/Exposure_end.txt contains the start/end timestamp of each blurry images under 'Blur' directory. An example data is provided in './Database/Raw/' for reference. 
+- Events.txt contains event data in (t,x,y,p) format with t in ns and p in {-1, 1}.
+- Exposure_start.txt contains the start timestamp of each blurry images in ns.
+- Exposure_end.txt contains the end timestamp of each blurry images in ns.
+An example data is provided in './Database/Raw/' for reference. 
 <br>
 After arranging the raw data into the above structure, please pack them into training pairs by running 
 ```
