@@ -82,6 +82,7 @@ If you want to train your own model, please prepare the blurry images and events
   |     |     |     |-- ...
 ```
 Events.txt contains event data in (t,x,y,p) format. Exposure_start.txt/Exposure_end.txt contains the start/end timestamp of each blurry images under 'Blur' directory. An example data is provided in './Database/Raw/' for reference. 
+<br>
 After arranging the raw data into the above structure, please pack them into training pairs by running 
 ```
 python Prepare_data.py --input_path=./Database/Raw/ --save_path=./Database/train/
