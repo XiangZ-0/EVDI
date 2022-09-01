@@ -68,7 +68,7 @@ python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-RBE.pth --test_path=
 - `--save_path` : path of reconstruction results.
 
 ### Train
-If you want to train your own model, please prepare the blurry images and events in the following directory structure:
+If you want to train your own model, please prepare the blurry images and events in the following directory structure (an example data is provided in './Database/Raw/' for reference):
 ```
 <project root>
   |-- Database
@@ -85,8 +85,6 @@ If you want to train your own model, please prepare the blurry images and events
 - Exposure_start.txt contains the start timestamp of each blurry images in ns.
 - Exposure_end.txt contains the end timestamp of each blurry images in ns.
 
-An example data is provided in './Database/Raw/' for reference. 
-<br>
 After arranging the raw data into the above structure, please pack them into training pairs by running 
 ```
 python Prepare_data.py --input_path=./Database/Raw/ --save_path=./Database/train/
