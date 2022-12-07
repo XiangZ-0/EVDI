@@ -90,10 +90,10 @@ class train_dataset(Dataset):
         total_span = (exp_start_leftB, exp_end_rightB)
         
         ## crop roi
-        img_size = leftB.shape
+        img_size = leftB.shape[-2:]
         roiTL = (np.random.randint(0, img_size[0]-self.roi_size[0]+1), np.random.randint(0, img_size[1]-self.roi_size[1]+1)) # top-left coordinate
-        leftB = leftB[roiTL[0]:roiTL[0]+self.roi_size[0], roiTL[1]:roiTL[1]+self.roi_size[1]]
-        rightB = rightB[roiTL[0]:roiTL[0]+self.roi_size[0], roiTL[1]:roiTL[1]+self.roi_size[1]]
+        leftB = leftB[:,roiTL[0]:roiTL[0]+self.roi_size[0], roiTL[1]:roiTL[1]+self.roi_size[1]]
+        rightB = rightB[:,roiTL[0]:roiTL[0]+self.roi_size[0], roiTL[1]:roiTL[1]+self.roi_size[1]]
         
         ## generate target timestamps
         timestamps = np.linspace(exp_start_leftB, exp_end_rightB, self.num_frames, endpoint=True) # include the last frame
@@ -228,65 +228,29 @@ class test_dataset(Dataset):
         exp_end_rightB = data['exp_end2']
         span_rightB = (exp_start_rightB, exp_end_rightB)
         
-        img_size = leftB.shape
+        img_size = leftB.shape[-2:]
         total_span = (exp_start_leftB, exp_end_rightB)
         
         ## generate target timestamps
         time_span = exp_end_rightB - exp_start_leftB
         ts = exp_start_leftB + time_span * self.target_ts # [0,1]
-        
-        ## initialize lists
-        leftB_inp1 = []
-        leftB_inp2 = []
-        leftB_w1 = []
-        leftB_w2 = []
-        rightB_inp1 = []
-        rightB_inp2 = []
-        rightB_w1 = []
-        rightB_w2 = []
-        leftB_coef = []
-        rightB_coef = []
 
         ## for leftB
-        leftB_inp1_tmp, leftB_inp2_tmp, leftB_w1_tmp, leftB_w2_tmp = util.event2frame(events, img_size, ts, span_leftB, total_span, self.num_bins, 0, (0,0))
-        leftB_inp1_tmp = util.fold_time_dim(leftB_inp1_tmp)
-        leftB_inp2_tmp = util.fold_time_dim(leftB_inp2_tmp)
+        leftB_inp1, leftB_inp2, leftB_w1, leftB_w2 = util.event2frame(events, img_size, ts, span_leftB, total_span, self.num_bins, 0, (0,0))
+        leftB_inp1 = util.fold_time_dim(leftB_inp1)
+        leftB_inp2 = util.fold_time_dim(leftB_inp2)
         
         ## for rightB
-        rightB_inp1_tmp, rightB_inp2_tmp, rightB_w1_tmp, rightB_w2_tmp = util.event2frame(events, img_size, ts, span_rightB, total_span, self.num_bins, 0, (0,0))
-        rightB_inp1_tmp = util.fold_time_dim(rightB_inp1_tmp)
-        rightB_inp2_tmp = util.fold_time_dim(rightB_inp2_tmp)
+        rightB_inp1, rightB_inp2, rightB_w1, rightB_w2 = util.event2frame(events, img_size, ts, span_rightB, total_span, self.num_bins, 0, (0,0))
+        rightB_inp1 = util.fold_time_dim(rightB_inp1)
+        rightB_inp2 = util.fold_time_dim(rightB_inp2)
         
         ## recon fusion weight 
-        left_coef, right_coef = adaptive_wei(ts,span_leftB,span_rightB)
-        leftB_coef.append(left_coef)
-        rightB_coef.append(right_coef)
-        
-        # # append list
-        leftB_inp1.append(leftB_inp1_tmp)
-        leftB_inp2.append(leftB_inp2_tmp)
-        leftB_w1.append(leftB_w1_tmp)
-        leftB_w2.append(leftB_w2_tmp)
-        rightB_inp1.append(rightB_inp1_tmp)
-        rightB_inp2.append(rightB_inp2_tmp)
-        rightB_w1.append(rightB_w1_tmp)
-        rightB_w2.append(rightB_w2_tmp)
-            
-        # to array
-        leftB_inp1 = np.array(leftB_inp1)
-        leftB_inp2 = np.array(leftB_inp2)
-        leftB_w1 = np.array(leftB_w1)
-        leftB_w2 = np.array(leftB_w2)
-        rightB_inp1 = np.array(rightB_inp1)
-        rightB_inp2 = np.array(rightB_inp2)
-        rightB_w1 = np.array(rightB_w1)
-        rightB_w2 = np.array(rightB_w2)
-        leftB_coef = np.array(leftB_coef)
-        rightB_coef = np.array(rightB_coef)
+        leftB_coef, rightB_coef = adaptive_wei(ts,span_leftB,span_rightB)
         
         save_prefix = self.data_list[ind][:-4]
         
-        return leftB_inp1,leftB_inp2,leftB,leftB_w1,leftB_w2, \
-            rightB_inp1,rightB_inp2,rightB,rightB_w1,rightB_w2, \
-                 leftB_coef, rightB_coef, save_prefix
+        return leftB_inp1,leftB_inp2,leftB,np.array(leftB_w1),np.array(leftB_w2), \
+            rightB_inp1,rightB_inp2,rightB,np.array(rightB_w1),np.array(rightB_w2), \
+                 np.array(leftB_coef), np.array(rightB_coef), save_prefix
                  

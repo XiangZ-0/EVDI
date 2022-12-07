@@ -182,3 +182,97 @@ class EVDI_Net(nn.Module):
         recon = self.sigmoid(x) * 255.
         
         return recon, Ef1, Ef2
+
+
+class EVDI_Color_Net(nn.Module):
+    def __init__(self):
+        super(EVDI_Color_Net, self).__init__()
+        
+        ## LDI network
+        self.LDI = LDI_subNet(32,3)
+        self.relu = nn.ReLU(True)
+        self.sigmoid = nn.Sigmoid() 
+        
+        ## fusion network
+        self.convBlock1 = conv_layer(15,16,3,1,1)
+        self.Pre = pre_subNet(16,64,'none',n_blocks=2,para=[3,1,1])
+        self.ca = ChannelAttention(64)
+        self.sa = SpatialAttention()
+        self.resBlock1 = ResnetBlock(64,'zero',get_norm_layer('none'), False, True)
+        self.resBlock2 = ResnetBlock(64,'zero',get_norm_layer('none'), False, True)
+        self.Post = post_subNet(128,16,'none',n_blocks=2, para=[3,1,1])
+        self.conv = nn.Conv2d(16, 3, 3, 1, 1) 
+
+    def forward(self, leftB_inp1, leftB_inp2, leftB_w1, leftB_w2,
+                rightB_inp1, rightB_inp2, rightB_w1, rightB_w2,
+                leftB, rightB, leftB_coef, rightB_coef): 
+        '''
+        Parameters
+        ----------
+        leftB : left blurry image.
+        rightB : left blurry image.
+        leftB_inp1 : first event segment for leftB.
+        leftB_inp2 : second event segment for leftB.
+        leftB_w1 : weight for first event segment (related to leftB).
+        leftB_w2 : weight for second event segment (related to leftB).
+        rightB_inp1 : first event segment for rightB.
+        rightB_inp2 : second event segment for rightB.
+        rightB_w1 : weight for first event segment (related to rightB).
+        rightB_w2 : weight for second event segment (related to rightB).
+        leftB_coef : coefficient for L^i_(i+1), i.e., \omega in paper.
+        rightB_coef : coefficient for L^i_(i+1), i.e., 1-\omega in paper.
+
+        Returns
+        -------
+        recon : final reconstruction result.
+        Ef1 : learned double integral of events (related to leftB).
+        Ef2 : learned double integral of events (related to rightB).
+        '''
+        
+        ## process by LDI networks
+        Ef1_tmp1 = self.LDI(leftB_inp1)
+        Ef1_tmp2 = self.LDI(leftB_inp2)
+        Ef1 = leftB_w1 * Ef1_tmp1 + leftB_w2 * Ef1_tmp2
+        Ef1 = self.relu(Ef1) + self.sigmoid(Ef1)
+        
+        Ef2_tmp1 = self.LDI(rightB_inp1)
+        Ef2_tmp2 = self.LDI(rightB_inp2)
+        Ef2 = rightB_w1 * Ef2_tmp1 + rightB_w2 * Ef2_tmp2
+        Ef2 = self.relu(Ef2) + self.sigmoid(Ef2)
+        
+        ## process by fusion network
+        # generate recon3
+        B,C,H,W = leftB.shape
+        N = Ef1.shape[0] // B
+        Ef1 = Ef1.reshape((B,N,C,H,W))
+        Ef2 = Ef2.reshape((B,N,C,H,W))
+        leftB = leftB.unsqueeze(1).repeat(1,N,1,1,1)
+        rightB = rightB.unsqueeze(1).repeat(1,N,1,1,1)
+        recon1 = leftB / Ef1                                                                                                   
+        recon2 = rightB / Ef2 
+        recon1 = recon1.reshape((B*N,C,H,W))
+        recon2 = recon2.reshape((B*N,C,H,W))
+        leftB = leftB.reshape((B*N,C,H,W))
+        rightB = rightB.reshape((B*N,C,H,W))
+        Ef1 = Ef1.reshape((B*N,C,H,W))
+        Ef2 = Ef2.reshape((B*N,C,H,W))
+        recon3 = recon1 * leftB_coef + recon2 * rightB_coef 
+        
+        # generate final result
+        x = torch.cat((recon1,recon2,recon3,Ef1,Ef2), 1) 
+        x = self.convBlock1(x)
+        blocks = []
+        for i, pre_layer in enumerate(self.Pre):
+            x = pre_layer(x)
+            blocks.append(x) 
+        x = self.resBlock1(x)
+        x = self.resBlock2(x)
+        x = self.ca(x) * x
+        x = self.sa(x) * x
+        for i, post_layer in enumerate(self.Post):
+            x = torch.cat((x, blocks[len(blocks)-i-1]), 1)
+            x = post_layer(x)
+        x = self.conv(x)
+        recon = self.sigmoid(x) * 255.
+        
+        return recon, Ef1, Ef2

@@ -3,8 +3,8 @@
 """
 @author: ZhangX
 """
-import torch
 import util
+import torch
 import torch.nn as nn
 
 def blur_sharp_loss(leftB, num_leftB, rightB, num_rightB, res):
@@ -14,8 +14,8 @@ def blur_sharp_loss(leftB, num_leftB, rightB, num_rightB, res):
         reblur_leftB = res[:, :num_leftB, :, :,:].mean(1) 
         reblur_rightB = res[:, -num_rightB:, :, :,:].mean(1)
     else: # for batch size>1
-        reblur_leftB = torch.zeros((B,1,H,W), device=res.device)
-        reblur_rightB = torch.zeros((B,1,H,W), device=res.device)
+        reblur_leftB = torch.zeros((B,C,H,W), device=res.device)
+        reblur_rightB = torch.zeros((B,C,H,W), device=res.device)
         for j in range(B):
             num_leftB_tmp = num_leftB[j]
             num_rightB_tmp = num_rightB[j]
@@ -47,7 +47,7 @@ def sharp_event_loss(res, mid_events):
     bias = 1e-3
     max_value = 255.
     L_S_E = 0
-    assert C in (1,3)
+    assert C in (1,3), 'Please ensure the image color channel is 1 (gray) or 3 (BGR).'
     if C == 3: # convert BGR 2 GRAY
         prev_imgs = res[:,:-1,0,:,:] * 0.114 + res[:,:-1,1,:,:] * 0.587 + res[:,:-1,2,:,:] * 0.299
         prev_imgs = prev_imgs.reshape((B*(N-1),1,H,W))
@@ -64,7 +64,7 @@ def sharp_event_loss(res, mid_events):
         
     mid_events = mid_events.reshape((B*(N-1),1,H,W))
     for i in range(mid_events.shape[0]):
-        if (mid_events[i,...].max() == mid_events[i,...].min()):  # no events, calculate two images
+        if (mid_events[i,...].max() == mid_events[i,...].min()):  # no events, calculate similarity of two images
             norm_prev_imgs = util.normalize(log_prev_imgs[i,...], max_val=max_value)
             norm_next_imgs = util.normalize(log_next_imgs[i,...], max_val=max_value)
             L_S_E += loss(norm_prev_imgs, norm_next_imgs) 

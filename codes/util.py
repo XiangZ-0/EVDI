@@ -76,7 +76,6 @@ def e2f_detail(event,eframe,ts,key_t,interval, noise, roiTL, img_size):
         new_t = ts - t
         idx = np.floor(new_t / interval).astype(int)
         idx[idx == T] -= 1
-        # assert(idx.max()<T)
         p[p == -1] = 0 # reversed porlarity
         np.add.at(eframe, x + y*W + p*W*H + idx*W*H*C, 1)
     else:
@@ -88,12 +87,11 @@ def e2f_detail(event,eframe,ts,key_t,interval, noise, roiTL, img_size):
         new_t = t - ts
         idx = np.floor(new_t / interval).astype(int)
         idx[idx == T] -= 1
-        # assert(idx.max()<T)
         p[p == 1] = 0 # pos in channel 0
         p[p == -1] = 1 # neg in channel 1
         np.add.at(eframe, x + y*W + p*W*H + idx*W*H*C, 1)
     
-    assert noise>=0 and noise<=1
+    assert noise>=0 and noise<=1, 'The noise level should be in [0, 1].'
     if noise>0:
         num_noise = int(noise * len(t))
         img_size = (H, W)
@@ -112,6 +110,10 @@ def event2frame(event, img_size, ts, f_span, total_span, num_frame, noise, roiTL
     ## convert event streams to [T, C, H, W] event tensor, C=2 indicates polarity
     f_start, f_end = f_span 
     total_start, total_end = total_span
+    event['x'] = event['x'].astype(int)
+    event['y'] = event['y'].astype(int)
+    event['t'] = event['t'].astype(int)
+    event['p'] = event['p'].astype(int)
         
     preE = np.zeros((num_frame, 2, img_size[0], img_size[1]))
     postE = np.zeros((num_frame, 2, img_size[0], img_size[1]))
@@ -131,6 +133,10 @@ def event_single_intergral(event, img_size, span, roiTL=(0,0)):
     start, end = span
     H, W = img_size
     event_img = np.zeros((H, W)).ravel()
+    event['x'] = event['x'].astype(int)
+    event['y'] = event['y'].astype(int)
+    event['t'] = event['t'].astype(int)
+    event['p'] = event['p'].astype(int)
     
     x,y,p,t = filter_events(event, start, end) # filter events by temporal dim
     x,y,p,t = filter_events_by_space(x,y,p,t,roiTL[1], roiTL[1]+img_size[1]) # filter events by x dim
@@ -190,7 +196,7 @@ def load_event_from_txt(txt_path, time_scale=1, img_size=(260,346), neg_value=-1
     if neg_value == -1:
         events['p'][events['p']==0] = -1
     
-    assert (events['x'].max() < img_size[1])
-    assert (events['y'].max() < img_size[0])
+    assert (events['x'].max() < img_size[1]), 'Please ensure the same spatial resolution of events and frames'
+    assert (events['y'].max() < img_size[0]), 'Please ensure the same spatial resolution of events and frames'
     
     return events
