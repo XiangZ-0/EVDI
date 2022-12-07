@@ -106,7 +106,7 @@ python Train.py
 - `--num_frames` : the number of reconstructions per input, i.e., 'N' in paper (recommended N>= 25).
 - `--bs` : batch size.
 - `--lr` : initial learning rate.
-- `--color_flag` : use color model or gray model.
+- `--color_flag` : use color or gray model.
 
 ## Citation
 If you find our work useful in your research, please cite:
