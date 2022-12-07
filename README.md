@@ -61,11 +61,16 @@ python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-HQF.pth --test_path=
 ```
 python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-RBE.pth --test_path=./Database/RBE/ --save_path=./Result/EVDI-RBE/
 ```
+- Test on GoPro-Color data
+```
+python Test.py --test_ts=0.5 --model_path=./PreTrained/EVDI-GoPro-Color.pth --test_path=./Database/GoPro-Color/ --save_path=./Result/EVDI-GoPro-Color/ --color_flag=1
+```
 **Main Parameters:**
 - `--test_ts` : reconstruction timestamp, normalized in \[0,1\].
 - `--model_path` : path of pretrained model.
 - `--test_path` : path of test dataset.
 - `--save_path` : path of reconstruction results.
+- `--color_flag` : use color model or gray model.
 
 ### Train
 If you want to train your own model, please prepare the blurry images and events in the following directory structure (an example data is provided in './Database/Raw/' for reference):
@@ -87,9 +92,9 @@ If you want to train your own model, please prepare the blurry images and events
 
 After arranging the raw data into the above structure, please pack them into training pairs by running 
 ```
-python Prepare_data.py --input_path=./Database/Raw/ --save_path=./Database/train/
+python Prepare_data.py --input_path=./Database/Raw/ --save_path=./Database/train/ --color_flag=0
 ```
-Finally, modify the parameters in 'Train.py' according to your need and run
+Please set --color_flag=1 if you want to use color images. Finally, modify the parameters in 'Train.py' according to your need and run
 ```
 python Train.py
 ```
@@ -101,6 +106,7 @@ python Train.py
 - `--num_frames` : the number of reconstructions per input, i.e., 'N' in paper (recommended N>= 25).
 - `--bs` : batch size.
 - `--lr` : initial learning rate.
+- `--color_flag` : use color model or gray model.
 
 ## Citation
 If you find our work useful in your research, please cite:
