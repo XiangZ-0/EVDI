@@ -157,11 +157,15 @@ if __name__ == '__main__':
     parser.add_argument("--conTrain_path", type=str, default="./PreTrained/EVDI-GoPro.pth", help="path to load model")
     parser.add_argument("--num_epoch", type=int, default=100, help="number of epoch")
     parser.add_argument("--loss_wei", type=list, default=[1,512,1e-1], help="weights for loss functions: [blur-sharp, blur-event, sharp-event]")
-    parser.add_argument("--num_frames", type=int, default=49, help="recover how many frames per input, i.e., 'N' in paper.\
-                        We observe that higher N leads to better performance but will need more training time (recommended N>=25). ")
+    parser.add_argument("--num_frames", type=int, default=49, help="recover how many frames per input, i.e., 'M' in paper.\
+                        We observe that higher M leads to better performance but will need more training time (recommended M>=25). ")
     parser.add_argument("--bs", type=int, default=4, help="batch size")
     parser.add_argument("--lr", type=float, default=1e-3, help="learning rate")
+    parser.add_argument("--seed", type=int, default=1226, help="random seed")
     
     opt = parser.parse_args()
+    torch.manual_seed(opt.seed) 
+    torch.cuda.manual_seed_all(opt.seed) 
+    np.random.seed(opt.seed) 
     
     train_EVDI(opt)
