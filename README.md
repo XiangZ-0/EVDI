@@ -7,6 +7,8 @@ Slow shutter speed and long exposure time of frame-based cameras often cause vis
 
 10X (middle) and 100X (right) frame-rate results from one EVDI model.
 
+**[News]**: Our work on *self-supervised deblurring performance generalization* is accepted by ICCV 2023 🎉, welcome to check and star [**GEM**](https://github.com/XiangZ-0/GEM) if it interests you! 😆
+
 ## Environment setup
 - Python 3.7
 - Pytorch 1.4.0
